@@ -192,6 +192,26 @@ with st.expander("🔍 Ver últimos registros guardados en la base de datos"):
             st.info("Todavía no hay registros guardados.")
         else:
             st.dataframe(df_registros, use_container_width=True)
+
+        st.divider()
+
+        # Descarga del historial COMPLETO (todas las columnas, todos los
+        # registros), no solo la vista previa de arriba. Se genera al
+        # tocar el boton, para no traer toda la tabla en cada recarga.
+        if st.button("📥 Preparar descarga de TODOS los registros (CSV completo)"):
+            conn = mysql.connector.connect(**DB_CONFIG)
+            df_completo = pd.read_sql(
+                "SELECT * FROM registros_uso ORDER BY id ASC", conn
+            )
+            conn.close()
+
+            csv_bytes = df_completo.to_csv(index=False).encode("utf-8-sig")
+            st.download_button(
+                label=f"Descargar CSV completo ({len(df_completo)} registros)",
+                data=csv_bytes,
+                file_name="registros_uso_completo.csv",
+                mime="text/csv",
+            )
     except Exception as e:
         st.error(f"No se pudo leer la base de datos: {e}")
 
