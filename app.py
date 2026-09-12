@@ -205,7 +205,7 @@ with st.expander("🔍 Ver últimos registros guardados en la base de datos"):
             )
             conn.close()
 
-            csv_bytes = df_completo.to_csv(index=False).encode("utf-8-sig")
+            csv_bytes = df_completo.to_csv(index=False, sep=";").encode("utf-8-sig")
             st.download_button(
                 label=f"Descargar CSV completo ({len(df_completo)} registros)",
                 data=csv_bytes,
