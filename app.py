@@ -29,9 +29,29 @@ except Exception:
 
 from services.metrado_service import EntradaMetrado, ALTURA_MURO_DEFECTO_M
 from services.ia_predictor import obtener_metrado
-from services.registro_service import guardar_registro
+from services.registro_service import guardar_registro, inicializar_base_datos
 
 st.set_page_config(page_title="Estimador de materiales - Vivienda Piura", page_icon="🏗️")
+
+# Crea la base de datos y la tabla 'registros_uso' si todavia no existen.
+# @st.cache_resource hace que esto corra una sola vez (no en cada recarga
+# de la pagina). Si falla (por ejemplo, credenciales no configuradas todavia
+# en Secrets), no rompe la app: solo se mostrara un aviso.
+@st.cache_resource
+def _preparar_base_datos():
+    try:
+        inicializar_base_datos()
+        return True
+    except Exception as e:
+        return str(e)
+
+_resultado_init = _preparar_base_datos()
+if _resultado_init is not True:
+    st.warning(
+        "No se pudo preparar la base de datos automaticamente. "
+        "La app funcionara igual, pero no se guardaran los registros de uso. "
+        f"Detalle: {_resultado_init}"
+    )
 
 st.title("🏗️ Estimador de materiales para vivienda")
 st.caption("Sistema web con IA · Viviendas de 1 piso · Piura, 2026")
