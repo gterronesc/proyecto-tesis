@@ -168,6 +168,33 @@ if enviado:
         )
 
 st.divider()
+
+# ---------------------------------------------------------------------------
+# Panel de verificacion (temporal): muestra los ultimos registros guardados
+# en MySQL, solo para confirmar que la conexion a la base de datos funciona.
+# Se puede borrar este bloque despues sin afectar el resto de la app.
+# ---------------------------------------------------------------------------
+with st.expander("🔍 Ver últimos registros guardados en la base de datos"):
+    try:
+        import pandas as pd
+        import mysql.connector
+        from services.registro_service import DB_CONFIG
+
+        conn = mysql.connector.connect(**DB_CONFIG)
+        df_registros = pd.read_sql(
+            "SELECT id, fecha_hora, area_construida_m2, n_ambientes, modelo_usado "
+            "FROM registros_uso ORDER BY id DESC LIMIT 30",
+            conn,
+        )
+        conn.close()
+
+        if df_registros.empty:
+            st.info("Todavía no hay registros guardados.")
+        else:
+            st.dataframe(df_registros, use_container_width=True)
+    except Exception as e:
+        st.error(f"No se pudo leer la base de datos: {e}")
+
 st.caption(
     "Proyecto de investigación · Cabrera Cabrera, H. y Terrones Campos, G. "
     
