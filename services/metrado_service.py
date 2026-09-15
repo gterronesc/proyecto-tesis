@@ -107,13 +107,13 @@ FACTOR_DESPERDICIO_LADRILLO = 1.05
 # ml/src/preprocessing.py con estos factores en 1.0, y sacar la mediana de
 # la columna "{material}_real" / "{material}_teorico" del CSV resultante.
 FACTOR_CALIBRACION = {
-    "cemento_bolsas": 1.808,
-    "arena_gruesa_m3": 1.195,
-    "arena_fina_m3": 1.019,
-    "piedra_grande_m3": 1.828,
-    "piedra_chancada_m3": 1.946,
-    "acero_corrugado_kg": 1.511,
-    "ladrillo_und": 1.020,
+    "cemento_bolsas": 1.0,
+    "arena_gruesa_m3": 1.0,
+    "arena_fina_m3": 1.0,
+    "piedra_grande_m3": 1.0,
+    "piedra_chancada_m3": 1.0,
+    "acero_corrugado_kg": 1.0,
+    "ladrillo_und": 1.0,
 }
 
 
